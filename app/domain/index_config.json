@@ -1,0 +1,58 @@
+{
+    "settings": {
+        "index": {
+            "knn": true,
+            "knn.algo_param.ef_search": 512,
+            "similarity": {
+                "custom_bm25": {
+                    "type": "BM25",
+                    "k1": 1.2,
+                    "b": 0.6
+                }
+            }
+        },
+        "analysis": {
+            "analyzer": {
+                "custom_analyzer": {
+                    "tokenizer": "standard",
+                    "filter": ["lowercase", "porter_stem"]
+                }
+            }
+        }
+    },
+    "mappings": {
+        "properties": {
+            "vector_field": {
+                "type": "knn_vector",
+                "dimension": 1024,
+                "method": {
+                    "space_type": "l2",
+                    "engine": "nmslib",
+                    "name": "hnsw",
+                    "parameters": {
+                        "ef_construction": 512,
+                        "m": 16
+                    }
+                }
+            },
+            "key": {"type": "text", "boost": 10, "analyzer": "custom_analyzer"},
+            "table": {"type": "text", "boost": 5.5, "analyzer": "custom_analyzer"},
+            "description": {"type": "text", "boost": 5.0, "analyzer": "custom_analyzer"},
+            "fields": {
+                "type": "nested",
+                "properties": {
+                    "name": {"type": "text", "boost": 1.5, "analyzer": "custom_analyzer"},
+                    "description": {"type": "text", "boost": 1.0, "analyzer": "custom_analyzer"}
+                }
+            },
+            "text": {"type": "text", "boost": 2.5, "analyzer": "custom_analyzer"},
+            "md5": {"type": "text"},
+            "components": {
+                "type": "nested",
+                "properties": {
+                    "name": {"type": "text"}
+                }
+            }
+        }
+    }
+}

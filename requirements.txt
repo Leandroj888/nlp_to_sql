@@ -1,0 +1,5 @@
+Flask~=3.0.3
+opensearch-py
+debugpy
+tqdm
+openai
